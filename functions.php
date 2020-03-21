@@ -27,20 +27,22 @@ if (function_exists('add_theme_support'))
 
     // Add Thumbnail Theme Support
     add_theme_support('post-thumbnails');
-    
-    add_image_size('mediano', 350, 250, true);
-
-
-    //add_image_size('custom-size', 700, 200, true); // Custom Thumbnail Size call using the_post_thumbnail('custom-size');
+    add_image_size('mediano', 350, 250, true); // Mediano
+    add_image_size('toursDestacado', 523, 294, true); //toursdestacado
+    add_image_size('toursPrincipal', 751, 422, true);
+    add_image_size('principalBlog', 1100, 404,true);
+    add_image_size('slider', 2000, 600, true);
+    add_image_size('miniatura', 98,66,true);
+    add_image_size('entradasIndex', 250,179, true);
 
     // Add Support for Custom Backgrounds - Uncomment below if you're going to use
     /*add_theme_support('custom-background', array(
 	'default-color' => 'FFF',
 	'default-image' => get_template_directory_uri() . '/img/bg.jpg'
-     ));
+    ));*/
 
     // Add Support for Custom Header - Uncomment below if you're going to use
-    add_theme_support('custom-header', array(
+    /*add_theme_support('custom-header', array(
 	'default-image'			=> get_template_directory_uri() . '/img/headers/default.jpg',
 	'header-text'			=> false,
 	'default-text-color'		=> '000',
@@ -99,6 +101,12 @@ function html5blank_header_scripts()
         wp_register_script('modernizr', get_template_directory_uri() . '/js/lib/modernizr-2.7.1.min.js', array(), '2.7.1'); // Modernizr
         wp_enqueue_script('modernizr'); // Enqueue it!
 
+        wp_register_script('lightbox', get_template_directory_uri() . '/js/lightbox.min.js', array(), '2.7.1'); // Lightbox
+        wp_enqueue_script('lightbox'); // Enqueue it!
+
+        wp_register_script('bxslider', get_template_directory_uri() . '/js/jquery.bxslider.js', array(), '4.1.1'); // bxslider
+        wp_enqueue_script('bxslider'); // Enqueue it!
+
         wp_register_script('html5blankscripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0.0'); // Custom scripts
         wp_enqueue_script('html5blankscripts'); // Enqueue it!
     }
@@ -119,7 +127,14 @@ function html5blank_styles()
     wp_register_style('normalize', get_template_directory_uri() . '/normalize.css', array(), '1.0', 'all');
     wp_enqueue_style('normalize'); // Enqueue it!
 
-    wp_register_style('html5blank', get_template_directory_uri() . '/style.css', array(), '1.1', 'all');
+    wp_register_style('lightboxcss', get_template_directory_uri() . '/css/lightbox.css', array(), '1.0', 'all');
+    wp_enqueue_style('lightboxcss'); // Enqueue it!
+
+    wp_register_style('bxslidercss', get_template_directory_uri() . '/css/jquery.bxslider.css', array(), '1.0', 'all');
+    wp_enqueue_style('bxslidercss'); // Enqueue it!
+
+
+    wp_register_style('html5blank', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
     wp_enqueue_style('html5blank'); // Enqueue it!
 }
 
@@ -175,8 +190,8 @@ if (function_exists('register_sidebar'))
 {
     // Define Sidebar Widget Area 1
     register_sidebar(array(
-        'name' => __('Widget Area 1', 'html5blank'),
-        'description' => __('Description for this widget-area...', 'html5blank'),
+        'name' => __('Zona de Cupones', 'html5blank'),
+        'description' => __('Agregue aquí sus cupones (máximo 2)', 'html5blank'),
         'id' => 'widget-area-1',
         'before_widget' => '<div id="%1$s" class="%2$s">',
         'after_widget' => '</div>',
@@ -258,7 +273,7 @@ function html5_blank_view_article($more)
 // Remove Admin bar
 function remove_admin_bar()
 {
-    return false;
+    return true;
 }
 
 // Remove 'text/css' from our enqueued stylesheet
@@ -347,6 +362,8 @@ add_action('get_header', 'enable_threaded_comments'); // Enable Threaded Comment
 add_action('wp_enqueue_scripts', 'html5blank_styles'); // Add Theme Stylesheet
 add_action('init', 'register_html5_menu'); // Add HTML5 Blank Menu
 add_action('init', 'create_post_type_html5'); // Add our HTML5 Blank Custom Post Type
+add_action('init', 'testimoniales_posttype' );
+add_action('init', 'slider_posttype');
 add_action('widgets_init', 'my_remove_recent_comments_style'); // Remove inline Recent Comment Styles from wp_head()
 add_action('init', 'html5wp_pagination'); // Add our HTML5 Pagination
 
@@ -401,38 +418,106 @@ function create_post_type_html5()
 {
     register_taxonomy_for_object_type('category', 'html5-blank'); // Register Taxonomies for Category
     register_taxonomy_for_object_type('post_tag', 'html5-blank');
-    register_post_type('html5-blank', // Register Custom Post Type
+    register_post_type('tours', // Register Custom Post Type
         array(
         'labels' => array(
-            'name' => __('HTML5 Blank Custom Post', 'html5blank'), // Rename these to suit
-            'singular_name' => __('HTML5 Blank Custom Post', 'html5blank'),
+            'name' => __('Tours', 'html5blank'), // Rename these to suit
+            'singular_name' => __('Tours', 'html5blank'),
             'add_new' => __('Add New', 'html5blank'),
-            'add_new_item' => __('Add New HTML5 Blank Custom Post', 'html5blank'),
+            'add_new_item' => __('Add New Tours', 'html5blank'),
             'edit' => __('Edit', 'html5blank'),
-            'edit_item' => __('Edit HTML5 Blank Custom Post', 'html5blank'),
-            'new_item' => __('New HTML5 Blank Custom Post', 'html5blank'),
-            'view' => __('View HTML5 Blank Custom Post', 'html5blank'),
-            'view_item' => __('View HTML5 Blank Custom Post', 'html5blank'),
-            'search_items' => __('Search HTML5 Blank Custom Post', 'html5blank'),
-            'not_found' => __('No HTML5 Blank Custom Posts found', 'html5blank'),
-            'not_found_in_trash' => __('No HTML5 Blank Custom Posts found in Trash', 'html5blank')
+            'edit_item' => __('Edit Tours', 'html5blank'),
+            'new_item' => __('New Tours', 'html5blank'),
+            'view' => __('View Tours', 'html5blank'),
+            'view_item' => __('View Tours', 'html5blank'),
+            'search_items' => __('Search Tours', 'html5blank'),
+            'not_found' => __('No se encontraron tours', 'html5blank'),
+            'not_found_in_trash' => __('No Tours found in Trash', 'html5blank')
         ),
         'public' => true,
         'hierarchical' => true, // Allows your posts to behave like Hierarchy Pages
-        'has_archive' => true,
+        'has_archive' => false,
+        'menu_position' => 6,
         'supports' => array(
             'title',
             'editor',
-            'excerpt',
             'thumbnail'
         ), // Go to Dashboard Custom HTML5 Blank post for supports
         'can_export' => true, // Allows export in Tools > Export
         'taxonomies' => array(
-            'post_tag',
-            'category'
         ) // Add Category and Post Tags support
     ));
 }
+
+function testimoniales_posttype()
+{
+    register_taxonomy_for_object_type('category', 'html5-blank'); // Register Taxonomies for Category
+    register_taxonomy_for_object_type('post_tag', 'html5-blank');
+    register_post_type('testimoniales', // Register Custom Post Type
+        array(
+        'labels' => array(
+            'name' => __('Testimoniales', 'html5blank'), // Rename these to suit
+            'singular_name' => __('Testimoniales', 'html5blank'),
+            'add_new' => __('Add New', 'html5blank'),
+            'add_new_item' => __('Add New Testimoniales', 'html5blank'),
+            'edit' => __('Edit', 'html5blank'),
+            'edit_item' => __('Edit Testimoniales', 'html5blank'),
+            'new_item' => __('New Testimoniales', 'html5blank'),
+            'view' => __('View Testimoniales', 'html5blank'),
+            'view_item' => __('View Testimoniales', 'html5blank'),
+            'search_items' => __('Search Testimoniales', 'html5blank'),
+            'not_found' => __('No se encontraron Testimoniales', 'html5blank'),
+            'not_found_in_trash' => __('No Testimoniales found in Trash', 'html5blank')
+        ),
+        'public' => true,
+        'hierarchical' => true, // Allows your posts to behave like Hierarchy Pages
+        'has_archive' => false,
+        'menu_position' => 6,
+        'supports' => array(
+            'title',
+            'editor',
+        ), // Go to Dashboard Custom HTML5 Blank post for supports
+        'can_export' => true, // Allows export in Tools > Export
+        'taxonomies' => array(
+        ) // Add Category and Post Tags support
+    ));
+}
+
+
+function slider_posttype()
+{
+    register_taxonomy_for_object_type('category', 'html5-blank'); // Register Taxonomies for Category
+    register_taxonomy_for_object_type('post_tag', 'html5-blank');
+    register_post_type('slider', // Register Custom Post Type
+        array(
+        'labels' => array(
+            'name' => __('Slider', 'html5blank'), // Rename these to suit
+            'singular_name' => __('Slider', 'html5blank'),
+            'add_new' => __('Add New', 'html5blank'),
+            'add_new_item' => __('Add New Slider', 'html5blank'),
+            'edit' => __('Edit', 'html5blank'),
+            'edit_item' => __('Edit Slider', 'html5blank'),
+            'new_item' => __('New Slider', 'html5blank'),
+            'view' => __('View Slider', 'html5blank'),
+            'view_item' => __('View Slider', 'html5blank'),
+            'search_items' => __('Search Slider', 'html5blank'),
+            'not_found' => __('No se encontraron Slider', 'html5blank'),
+            'not_found_in_trash' => __('No Slider found in Trash', 'html5blank')
+        ),
+        'public' => true,
+        'hierarchical' => true, // Allows your posts to behave like Hierarchy Pages
+        'has_archive' => false,
+        'menu_position' => 6,
+        'supports' => array(
+            'title',
+            'thumbnail',
+        ), // Go to Dashboard Custom HTML5 Blank post for supports
+        'can_export' => true, // Allows export in Tools > Export
+        'taxonomies' => array(
+        ) // Add Category and Post Tags support
+    ));
+}
+
 
 /*------------------------------------*\
 	ShortCode Functions
