@@ -1,18 +1,40 @@
+			<!-- /wrapper -->
+			</div>
+
 			<!-- footer -->
 			<footer class="footer" role="contentinfo">
 
+				<div class="widgets wrapper clear">
+
+					<div class="columna3">
+						<h3>Sobre Nosotros</h3>
+					</div>
+					<div class="columna3">
+						<h3>Próximos Viajes</h3>
+					</div>
+					<div class="columna3">
+						<h3>Últimos Consejos</h3>
+					</div>
+					<div class="columna3">
+						
+					</div>
+
+				</div>
+
+				<div class="clear"></div>
+
 				<!-- copyright -->
 				<p class="copyright">
-					&copy; <?php echo date('Y'); ?> Copyright <?php bloginfo('name'); ?>. <?php _e('Powered by', 'html5blank'); ?>
-					<a href="//wordpress.org" title="WordPress">WordPress</a> &amp; <a href="//html5blank.com" title="HTML5 Blank">HTML5 Blank</a>.
+					&copy; <?php echo date('Y'); ?> Todos los derechos Reservados <?php bloginfo('name'); ?>. 
+					
 				</p>
 				<!-- /copyright -->
 
 			</footer>
 			<!-- /footer -->
 
-		</div>
-		<!-- /wrapper -->
+		
+		
 
 		<?php wp_footer(); ?>
 
