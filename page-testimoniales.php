@@ -46,7 +46,7 @@
 
 			<div class="contacto-testimoniales grid1-3">
 				<h3>Envíanos tu testimonial</h3>
-				<?php echo do_shortcode('[contact-form-7 id="97" title="Formulario para Testimoniales."]'); ?>
+				<?php echo do_shortcode('[contact-form-7 id="66" title="Testimoniales"]'); ?>
 			</div>
 
 
