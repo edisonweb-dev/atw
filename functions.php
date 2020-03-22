@@ -9,6 +9,26 @@
 	External Modules/Files
 \*------------------------------------*/
 
+function admin_style(){
+
+    wp_enqueue_style('vegasCSS', get_template_directory_uri() .'/login/css/vegas.min.css', false );
+
+    wp_enqueue_style('loginCSS', get_template_directory_uri() .'/login/css/loginStyles.css',array(), '1.1', false );
+
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('vegajs', get_template_directory_uri() .'/login/js/vegas.min.js', array('jquery'), '1.0.0', true );
+    wp_enqueue_script('loginjs', get_template_directory_uri() .'/login/js/login.js', array('jquery'), '1.0.0', true );
+
+    wp_localize_script(
+        'loginjs',
+        'login_imagenes',
+        array(
+            "ruta_plantilla" => get_template_directory_uri()
+        )
+    );
+}
+add_action('login_enqueue_scripts', 'admin_style', 10);
+
 // Load any external files you have here
 
 /*------------------------------------*\

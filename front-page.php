@@ -34,6 +34,8 @@
 
 	<div class="wrapper">
 
+	<?php get_template_part('searchform') ?>
+
 	<section class="tours clear">
 
 			<h2 class="titulo"><span>Próximos Tours</span></h2>
